@@ -17,12 +17,12 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Hesap Makinesi',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Calculator'),
+      home: MyHomePage(title: 'Hesap Makinesi'),
     );
   }
 }
