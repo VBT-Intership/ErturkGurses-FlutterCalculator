@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_calculator_app/view/calculator_screen.dart';
 
-import 'calculator.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -39,8 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
