@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_calculator_app/calculator.dart';
 import 'package:my_calculator_app/core/compenents/resultBoard.dart';
 import 'package:my_calculator_app/view/keyboard.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class CalculatorScreen extends StatefulWidget {
   CalculatorScreen({Key key}) : super(key: key);
@@ -11,62 +11,47 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  String result = " ";
+  var rock;
+  ContextModel cm = ContextModel();
+  Parser p = Parser();
+  String result = '';
   bool isResult = false;
   void _onPressed({String buttonText}) {
     setState(() {
       if (isResult) {
-        result = ' ';
+        result = '';
       }
 
-      if (buttonText == '<-' && result != ' ') {
-        isResult = false;
+      if (buttonText == '=') {
+        if (result.isNotEmpty) {
+          try {
+            Expression exp = p.parse(result);
 
-        result = result.substring(0, result.length - 1);
-      } else if (buttonText == '=') {
-        isResult = true;
-        double _result;
-
-        try {
-          // Girdiyi infix/prefix dönüşümü için hazırladık, ters çevirdik
-          var reversedInput = Calculator.reverseEquation(result);
-
-          // Çevrilmiş stringi daha rahat kullanabilmek adına stack içine yerleştirdik
-          var equationStack = Calculator.stringToStack(reversedInput);
-
-          // Infixten postfixe geçiş yaptık
-          var postfixEquationStack = Calculator.infixToPostfix(equationStack);
-
-          // Sonucu hesaplayıp ekrana yazdık.
-          _result = Calculator.calculateFromPrefix(postfixEquationStack);
-          if (_result == double.infinity) {
-            print(
-                '\nBir sayı sıfıra bölünemez. Lütfen girdiyi kontrol ediniz\n');
-          } else {
-            result = _result.toString();
+            result = (exp.evaluate(EvaluationType.REAL, cm)).toString();
+            isResult = true;
+          } catch (e) {
+            print(e);
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext bc) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: new Center(
+                      child: Text('HATALI İFADE'),
+                    ),
+                  );
+                });
           }
-        } catch (e) {
-          _result = 0;
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 10,
-                  child: new Center(
-                    child: Text('HATALI İFADE'),
-                  ),
-                );
-              });
         }
-        ;
-      } else if (buttonText != '<-' &&
-          buttonText != '==' &&
-          result.length <= 45) {
+      } else if (buttonText == '<-') {
+        if (result.isNotEmpty) {
+          isResult = false;
+          result = result.substring(0, result.length - 1);
+        }
+      } else {
         isResult = false;
-
         result += buttonText;
       }
-      print('result: ' + result + '|');
     });
   }
 
