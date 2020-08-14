@@ -32,12 +32,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           } catch (e) {
             print(e);
             showModalBottomSheet(
+              
                 context: context,
                 builder: (BuildContext bc) {
                   return Container(
                     height: MediaQuery.of(context).size.height / 10,
                     child: new Center(
-                      child: Text('HATALI İFADE'),
+                      child: Text('Eksik ya da hatalı ifade!'),
                     ),
                   );
                 });
